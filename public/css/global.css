@@ -19,7 +19,7 @@ html {
 body {
   background-position: center; /* Center the image */
   background-size: cover;
-  background-image: url("../../src/assets/images/backgrounds/background.jpeg");
+  background-image: url("../assets/images/backgrounds/background.jpeg");
   background-repeat: no-repeat;
   font-family: Roboto;
 }

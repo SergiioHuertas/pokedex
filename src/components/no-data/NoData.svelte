@@ -24,6 +24,6 @@
     }
 </style>
 <div class="no-data">
-    <img class='pokedex-title' src="../src/assets/gifs/pokeball.gif" alt={'pokeball'} />
+    <img class='pokedex-title' src="/assets/gifs/pokeball.gif" alt={'pokeball'} />
     <h3>Search for a Pokemon</h3>
 </div>

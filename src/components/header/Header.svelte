@@ -19,5 +19,5 @@
 </style>
 
 <div class="title-images">
-    <img class='pokedex-title' src="../src/assets/images/logos/title.png" alt={'title'} />
+    <img class='pokedex-title' src="/assets/images/logos/title.png" alt={'title'} />
 </div>

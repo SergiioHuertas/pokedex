@@ -174,7 +174,7 @@ function App() {
 
   return (
     <>
-        <img src="../src/assets/images/logos/Pokedex_logo.png" alt={'pokedex'} />
+        <img src="/assets/images/logos/Pokedex_logo.png" alt={'pokedex'} />
         {pokemon && !loading && !error && (showPokemon())}
         {error && !loading && <div>{error}</div>}
         {loading && <div>Loading...</div>}
