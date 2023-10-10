@@ -257,10 +257,14 @@
 
 	.slide-wrapper {
 		align-items: center;
-		display: flex;
-		flex-direction: column;
 		width: 100%;
 		margin-top: 5px;
+	}
+
+	@media screen and (max-width: 768px) {
+		.slide-wrapper {
+			overflow: overlay;
+		}
 	}
 
 

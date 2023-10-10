@@ -126,6 +126,7 @@
         flex-direction: row;
         justify-content: center;
         gap: 5%;
+        margin: 5px;
     }
     .pokemonData-info {
         flex: 1;
@@ -194,6 +195,7 @@
         justify-content: center;
         align-items: center;
         border-radius: 15px;
+        margin: 5px;
         & .stats-header {
             border-radius: 12px 12px 0 0;
             border-bottom: 2px solid black;
@@ -253,6 +255,7 @@
         border: 3px solid #000000;
         background-color: darkkhaki;
         border-radius: 15px;
+        margin: 5px;
 
         & .types-header {
             border-radius: 12px 12px 0 0;
@@ -294,6 +297,7 @@
         justify-content: center;
         align-items: center;
         border-radius: 15px;
+        margin: 5px;
         & .abilities-header {
             display: flex;
             border-radius: 12px 12px 0 0;

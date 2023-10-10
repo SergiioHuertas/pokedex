@@ -6,14 +6,14 @@
 <style>
     .search-area {
         font-size: 18px;
-        display: grid;
+        display: flex;
         place-items: center start;
         padding: 5px;
         border-radius: 0.66em;
         backdrop-filter: blur(5px);
-        z-index: 999;
         margin: 10px 0 0 0;
-        width: 70%;
+        width: 100%;
+        flex-wrap: wrap;
     }
 
     @media screen and ( min-width: 900px ) {
@@ -21,9 +21,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(5px);
             margin: 10px 0 0 0;
             font-size: 22px;
+            flex-direction: row;
             width: 40%;
+            flex-wrap: wrap;
         }
         h3 {
             margin-inline: 60px;
