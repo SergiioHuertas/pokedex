@@ -263,7 +263,6 @@
 
 	@media screen and (max-width: 768px) {
 		.slide-wrapper {
-			overflow: overlay;
 		}
 	}
 
