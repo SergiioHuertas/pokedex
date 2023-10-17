@@ -5,9 +5,9 @@
 
     let prevEvo = evolutionChainData;
 
-    let evolution1 = null;
-    let evolution2 = null;
-    let evolution3 = null;
+    let promiseEvo1 = null;
+    let promiseEvo2 = null;
+    let promiseEvo3 = null;
 
     // get evolution chain data
     $: if (evolutionChainData) {
@@ -15,33 +15,34 @@
         console.log(evolutionChainData, 'evolutionChainData')
         if (prevEvo !== evolutionChainData) {
             prevEvo = evolutionChainData;
-            evolution1 = null;
-            evolution2 = null;
-            evolution3 = null;
+            promiseEvo1 = null;
+            promiseEvo2 = null;
+            promiseEvo3 = null;
         }
 
         //fetch evolutions data
-        if (evolution1 === null) {
 
-            fetch(evolutionChainData.chain.species.url)
+            promiseEvo1 = fetch(evolutionChainData.chain.species.url)
                 .then(res => res.json())
                 .then(data => {
                     console.log(data, 'data')
                     const { id, name } = data;
-                    evolution1 = {
+                    return  {
                         id,
                         name,
                         image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
                     };
                 })
                 .catch(err => console.log(err));
-        }
 
-        if ((evolution2 === null || evolution2.length === 0) && evolutionChainData.chain.evolves_to.length > 0) {
+
+        if (evolutionChainData.chain.evolves_to.length > 0) {
             const evo2delta = [];
             // fetch for each possible evolution
             evolutionChainData.chain.evolves_to.forEach(async evolution => {
-                await fetch(evolution.species.url)
+                // await for all evolutions to be fetched
+
+                promiseEvo2 = await fetch(evolution.species.url)
                     .then(res => res.json())
                     .then(data => {
                         const { id, name } = data;
@@ -50,31 +51,25 @@
                             name,
                             image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
                         });
+                        if (evo2delta.length === evolutionChainData.chain.evolves_to.length) {
+                            return evo2delta;
+                        }
                     })
                     .catch(err => console.log(err));
             });
-
-            // after evo2delta is fully populated
-            setTimeout(() => {
-                if (evo2delta.length === evolutionChainData.chain.evolves_to.length) {
-                    evolution2 = evo2delta;
-                }
-            }, 1000);
         }
 
-        if (evolution3 === null) {
-            fetch(evolutionChainData.chain.evolves_to[0]?.evolves_to[0]?.species.url)
+            promiseEvo3 = fetch(evolutionChainData.chain.evolves_to[0]?.evolves_to[0]?.species.url)
                 .then(res => res.json())
                 .then(data => {
                     const { id, name } = data;
-                    evolution3 = {
+                    return {
                         id,
                         name,
                         image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
                     };
                 })
                 .catch(err => console.log(err));
-        }
     }
 </script>
 
@@ -161,30 +156,35 @@
 <div class="evolution-chain">
     <h3>Evolution chain</h3>
     <div class="evolutions">
-    {#if evolution1}
-        <div class="evolution1" on:click={(e) => {triggerSearch(e, evolution1.name)}}>
-            <img src={evolution1.image} alt={evolution1.name} />
-            <p>{evolution1.name}</p>
-        </div>
-    {/if}
-    {#if evolution2}
-        <svg><line x1="0" y1="70" x2="350" y2="70" stroke="white"></line></svg>
-            <div class="evolution2">
-        {#each evolution2 as evolution, index}
-            <div class="evolution2-iteration-{index} evolution2-item" on:click={(e) => {triggerSearch(e, evolution.name)}}>
-                <img src={evolution.image} alt={evolution.name} />
-                <p>{evolution.name}</p>
-            </div>
-        {/each}
-            </div>
-    {/if}
-    {#if evolution3}
-        <svg><line x1="0" y1="70" x2="350" y2="70" stroke="white"></line></svg>
-        <div class="evolution3" on:click={(e) => {triggerSearch(e, evolution3.name)}}>
-            <img src={evolution3.image} alt={evolution3.name} />
-            <p>{evolution3.name}</p>
-        </div>
-    {/if}
+        {#await promiseEvo1 then evo1}
+            {#if evo1}
+                <div class="evolution1" on:click={(e) => {triggerSearch(e, evo1.name)}}>
+                    <img src={evo1.image} alt={evo1.name} />
+                    <p>{evo1.name}</p>
+                </div>
+            {/if}
+        {/await}
+        {#await promiseEvo2 then evolution2}
+            {#if evolution2}
+                <svg><line x1="0" y1="70" x2="350" y2="70" stroke="white"></line></svg>
+                    <div class="evolution2">
+                {#each evolution2 as evolution, index}
+                    <div class="evolution2-iteration-{index} evolution2-item" on:click={(e) => {triggerSearch(e, evolution.name)}}>
+                        <img src={evolution.image} alt={evolution.name} />
+                        <p>{evolution.name}</p>
+                    </div>
+                {/each}
+                    </div>
+            {/if}
+        {/await}
+        {#await promiseEvo3 then evolution3}
+            {#if evolution3}
+                <svg><line x1="0" y1="70" x2="350" y2="70" stroke="white"></line></svg>
+                <div class="evolution3" on:click={(e) => {triggerSearch(e, evolution3.name)}}>
+                    <img src={evolution3.image} alt={evolution3.name} />
+                    <p>{evolution3.name}</p>
+                </div>
+            {/if}
+        {/await}
     </div>
-
 </div>

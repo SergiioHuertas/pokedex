@@ -19,5 +19,8 @@
         font-family: 'Press Start 2P', cursive;
         line-height: 150%;
         width: 60%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
     }
 </style>

@@ -41,23 +41,11 @@
 	  evolutionChainData = null;
   }
 
-  onMount(() => {
-	const $headings = document.querySelectorAll("h1,h2,h3");
-	const $anchor = [...$headings].filter((el) => {
-	  const id = el.getAttribute("id")?.replace(/^.*?-/g,"");
-	  const hash = window.location.hash?.replace(/^.*?-/g,"")
-	  return id === hash;
-	})[0];
-	if( $anchor ) {
-		setTimeout(() => {
-			$anchor.scrollIntoView();
-		},100);
-	}
-  });
-
   pokemon.configure({ apiKey: import.meta.env.VITE_API_KEY });
 
   const loadQuery = async() => {
+	  // if query is pokedex number, use pokemon name
+
 	lastQuery = query;
 
     if ( !usableQuery || query.length === 0) {
@@ -111,6 +99,8 @@
 				pokemonData = data; // Update the pokemon variable directly
 				error = null; // Clear the error
 				if (pokemonData) {
+					// if query is number use pokemon name
+					query = pokemonData.name;
 					// get evolution chain
 					const response = await fetch(pokemonData.species.url);
 					const data = await response.json();
