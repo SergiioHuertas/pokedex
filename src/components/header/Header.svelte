@@ -10,14 +10,21 @@
         align-items: center;
         justify-content: center;
 
-        & .pokedex-title {
+        & a {
             display: flex;
+            align-items: center;
+            justify-content: center;
             width: 40%;
             margin: 15px;
+        }
+        & .pokedex-title {
+            display: flex;
+            width: 100%;
+
         }
     }
 </style>
 
 <div class="title-images">
-    <img class='pokedex-title' src="/assets/images/logos/title.png" alt={'title'} />
+    <a href="/"><img class='pokedex-title' src="/assets/images/logos/title.png" alt={'title'} /></a>
 </div>
