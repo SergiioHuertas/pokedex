@@ -74,12 +74,6 @@
         }
     }
 
-    @property --border-angle {
-        syntax: "<angle>";
-        inherits: true;
-        initial-value: 0turn;
-    }
-
     .pokemonData-images {
         display: flex;
         flex-direction: column;
@@ -353,7 +347,7 @@
         box-shadow: inset 0 0 20px -5px rgba(255, 255, 255, 0.5),
         inset 0 -40px 40px -20px rgba(255, 255, 255, 0.5);
         background: linear-gradient(#FF3D00 120px, transparent 0) no-repeat;
-        background-position: 0px 120px;
+        background-position: 0 120px;
         animation: fillLq 10s linear infinite alternate;
     }
     .loader:before {

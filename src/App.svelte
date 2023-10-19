@@ -1,19 +1,18 @@
 <script>
-  import { onMount } from "svelte";
-  import pokemon from "pokemontcgsdk";
-  import CardList from "./components/tcg/Cards.svelte";
-  import Pokedex from "./components/pokedex/Pokedex.svelte";
-  import Card from "./components/tcg/CardProxy.svelte";
-  import Error from "./components/tcg/Error.svelte";
-  import { fade, fly } from 'svelte/transition';
-  import Tabs from './components/tabs/Tabs.svelte';
-  import Movements from "./components/movements/Movements.svelte";
-  import { TabItems, TabIds } from './const/TabItems.js';
-  import Search from "./components/search/Search.svelte";
-  import Header from "./components/header/Header.svelte";
-  import NoData from "./components/no-data/NoData.svelte";
+	import pokemon from "pokemontcgsdk";
+	import CardList from "./components/tcg/Cards.svelte";
+	import Pokedex from "./components/pokedex/Pokedex.svelte";
+	import Card from "./components/tcg/CardProxy.svelte";
+	import Error from "./components/tcg/Error.svelte";
+	import {fly} from 'svelte/transition';
+	import Tabs from './components/tabs/Tabs.svelte';
+	import Movements from "./components/movements/Movements.svelte";
+	import {TabIds, TabItems} from './const/TabItems.js';
+	import Search from "./components/search/Search.svelte";
+	import Header from "./components/header/Header.svelte";
+	import NoData from "./components/no-data/NoData.svelte";
 
-  let showPokedex = false;
+	let showPokedex = false;
   let query = "";
   let lastQuery = "";
   let error = null;
@@ -80,7 +79,7 @@
 								isError = true;
 							}
     					loadingQuery = false;
-    			  }).catch((a,b,c) => {
+    			  }).catch(() => {
               		queryResult = [];
 					loadingQuery = false;
               		isError = true;
@@ -92,8 +91,7 @@
 			loadingPokedex = true; // Update the loading variable directly
 			try {
 				const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query.toLowerCase()}`);
-				const data = await response.json();
-				pokemonData = data; // Update the pokemon variable directly
+				pokemonData = await response.json(); // Update the pokemon variable directly
 				error = null; // Clear the error
 				if (pokemonData) {
 					// if query is number use pokemon name
@@ -129,7 +127,7 @@
   let slideWrapper, anim;
 
   function animController() {
-	  if(activeTab == state) return;
+	  if(activeTab === state) return;
 
 	  const nodeWidth = slideWrapper.offsetWidth;
 	  const currentMultiplier = activeTab > state ? 1 : -1;
@@ -260,7 +258,7 @@
 		box-shadow: inset 0 0 20px -5px rgba(255, 255, 255, 0.5),
 		inset 0 -40px 40px -20px rgba(255, 255, 255, 0.5);
 		background: linear-gradient(#ff0000 120px, transparent 0) no-repeat;
-		background-position: 0px 120px;
+		background-position: 0 120px;
 		animation: fillLq 10s linear infinite alternate;
 	}
 	.loader:before {

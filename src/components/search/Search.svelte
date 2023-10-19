@@ -41,11 +41,10 @@
         &:placeholder-shown {
             text-overflow: ellipsis;
         }
-        font-family: Roboto;
-        font-size: inherit;
+        font-family: 'Press Start 2P', Roboto,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;
+        font-size: 10px;
         border: 1px solid rgba(255,255,255,0.1);
         border-radius: .5em;
-        padding: .5em 2em .5em .75em;
         margin: 0;
         background: hsla(220, 7%, 17%, .66);
         color: white;
@@ -56,7 +55,7 @@
         grid-row: 1;
         grid-column: 1;
         width: 100%;
-
+        padding: 10px 50px 10px 10px;
     }
 
     input:active,
@@ -92,7 +91,7 @@
     }
 
     h3 {
-        font-family: Roboto;
+        font-family: 'Press Start 2P', Roboto, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif ;
         font-size: inherit;
         font-weight: normal;
         margin-block: 10px;
@@ -102,7 +101,7 @@
 <section class="search-area">
 
     <form id="example-form" on:submit={(e) => triggerSearch(e)}>
-        <input type="search" pattern="^[a-zA-Z0-9 .-]*$" name="search" id="search" bind:value={query} placeholder="eg: Moltres, Galarian, 398, etc." />
+        <input type="search" pattern="^[a-zA-Z0-9 -.]*$" name="search" id="search" bind:value={query} placeholder="Moltres, Galarian, 365" />
     </form>
 
     <svg on:click={(e) => triggerSearch(e)} on:keydown={(e) => triggerSearch(e)} xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
