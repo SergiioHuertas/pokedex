@@ -1,15 +1,24 @@
 <script>
     export let data;
+    export let selectedGame;
+    export let mainColor;
+    export let secondaryColor;
 
-    $: levelMovesDetail = data?.map(move => {
-        return {
-            name: move.move.name,
-            level: move.version_group_details?.[0].level_learned_at,
-            generation: move.version_group_details?.map(version => version.version_group.name).reduce(function (acc, curr) {
-                if (!acc.includes(curr))
-                    acc.push(curr);
-                return acc;
-            }, []).join(', ')
+    const styleTable = (index) => {
+        if (index % 2 === 0) {
+            return mainColor;
+        } else {
+            return secondaryColor;
+        }
+    }
+    let levelMovesDetail = [];
+
+    $: data?.map(move => {
+        if (move.version_group_details?.map(version => version.version_group.name).includes(selectedGame)) {
+            levelMovesDetail.push({
+                name: move.move.name,
+                level: move.version_group_details?.[0].level_learned_at,
+            })
         }
     })
 </script>
@@ -17,6 +26,11 @@
 
     table, th, td {
         border: 2px solid black;
+        font-size: 12px;
+    }
+
+    th {
+        padding: 5px;
     }
 
     tr:nth-child(even) {
@@ -29,6 +43,12 @@
 
     tr:nth-child(1) {
         background-color: #ffffff;
+
+        & th {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            color: black;
+        }
     }
 
     .pokemon-level-movements {
@@ -46,26 +66,25 @@
 
 </style>
 
+{#if levelMovesDetail.length > 0}
         <div class="pokemon-level-movements">
             <h3>LEVEL MOVES</h3>
             <table class="pokemon-level-movements-content">
                 <tr>
                     <th>Move</th>
                     <th>Level</th>
-                    <th>Generation</th>
                 </tr>
-                {#each levelMovesDetail as move}
-                    <tr class="pokemon-level-movement">
+                <!-- use index to style -->
+                {#each levelMovesDetail as move, index }
+                    <tr style="background-color: {styleTable(index)}" class="pokemon-level-movement">
                         <th>
                             {move.name}
                         </th>
                         <th>
                             {move.level}
                         </th>
-                        <th>
-                            {move.generation}
-                        </th>
                     </tr>
                 {/each}
             </table>
         </div>
+{/if}

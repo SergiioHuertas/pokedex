@@ -47,6 +47,10 @@
         width: 100%;
     }
 
+	li.active {
+		cursor: auto;
+	}
+
 	strong {
 		font-size: 12px;
 		font-family: 'Press Start 2P', cursive;

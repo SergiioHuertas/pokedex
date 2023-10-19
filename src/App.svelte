@@ -241,12 +241,8 @@
 	.slide-wrapper {
 		align-items: center;
 		width: 100%;
+		height: 100%;
 		margin-top: 5px;
-	}
-
-	@media screen and (max-width: 768px) {
-		.slide-wrapper {
-		}
 	}
 
 
