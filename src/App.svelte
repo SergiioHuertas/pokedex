@@ -189,7 +189,7 @@
 						<h3>Fetching Pokemon...</h3>
 						<span class="loader"></span>
 					{:else if !loadingPokedex && !pokemonData}
-						<h3>Search for a Pokemon</h3>
+						<h3>Search for a Pokemon or pokedex number</h3>
 					{/if}
 				{:else if currentTab.id === TabIds.MOVES}
 					<Movements bind:pokemonData error={error} loading={loadingPokedex}/>

@@ -2,8 +2,8 @@
     export let label, isActive, icon;
 </script>
 
-<li class='tab-item' class:active={isActive}>
-	<div on:keypress on:click>
+<li class='tab-item' on:click class:active={isActive}>
+	<div on:keypress>
 		<img src={icon} /> <strong>{label}</strong>
 	</div>
 </li>
@@ -14,10 +14,8 @@
         display: flex;
         border-top: 2px solid transparent;
         padding: 1rem;
-        cursor: pointer;
         flex-flow: column nowrap;
         justify-content: space-around;
-        cursor: pointer;
         text-align: center;
     }
 
@@ -43,6 +41,7 @@
     }
 
     li{
+		cursor: pointer;
 		border-radius: 5px;
 		background-color: #dad7d4;
         width: 100%;
