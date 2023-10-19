@@ -63,7 +63,6 @@
               			pageSize: 36
     				})
     				.then(result => {
-						console.log(result.data, 'result.data');
     					const cards = result.data || [];
               			queryResult = [];
               			isError = false;
@@ -91,11 +90,9 @@
 
 		const loadPokedex = async() => {
 			loadingPokedex = true; // Update the loading variable directly
-			console.log('query', query)
 			try {
 				const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query.toLowerCase()}`);
 				const data = await response.json();
-				console.log('data', data);
 				pokemonData = data; // Update the pokemon variable directly
 				error = null; // Clear the error
 				if (pokemonData) {
@@ -146,8 +143,6 @@
   const selectActiveTab = () => {
 	  clearTimeout( tabTimer );
 	  tabTimer = setTimeout(() => {
-	  console.log(pokemonData, 'pokemonData');
-	  console.log(queryResult, 'queryResult');
 		  if (pokemonData == null && queryResult.length > 0) {
 			  $: activeTab = TabIds.TCG - 1;
 		  } else {

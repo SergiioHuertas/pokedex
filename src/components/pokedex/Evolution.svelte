@@ -11,8 +11,6 @@
 
     // get evolution chain data
     $: if (evolutionChainData) {
-        console.log(prevEvo, 'prevEvo')
-        console.log(evolutionChainData, 'evolutionChainData')
         if (prevEvo !== evolutionChainData) {
             prevEvo = evolutionChainData;
             promiseEvo1 = null;
@@ -25,7 +23,6 @@
             promiseEvo1 = fetch(evolutionChainData.chain.species.url)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data, 'data')
                     const { id, name } = data;
                     return  {
                         id,

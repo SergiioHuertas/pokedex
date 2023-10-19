@@ -16,7 +16,6 @@ function App() {
         try {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
             const data = await response.json();
-            console.log('data', data);
             setPokemon(data);
             setError(null);
         } catch (e) {

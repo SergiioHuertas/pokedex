@@ -20,7 +20,6 @@
     const triggerDialog = (description) => {
         abilityDescriptionText = description;
         visible = true;
-        console.log(abilityDescriptionText, 'abilityDescriptionText')
         setTimeout(() => {
             if (abilityDescriptionText) {
                 dialog.showModal()
@@ -35,7 +34,6 @@
                 .then(response => response.json())
                 .then(data => {
                     ability.description = data.effect_entries.find(entry => entry.language.name === 'en').effect;
-                    console.log(data, 'data' );
                 })
                 .catch(error => {
                     console.log(error);
