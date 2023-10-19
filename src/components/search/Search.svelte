@@ -102,7 +102,7 @@
 <section class="search-area">
 
     <form id="example-form" on:submit={(e) => triggerSearch(e)}>
-        <input type="search" name="search" id="search" bind:value={query} placeholder="eg: Moltres, Galarian, 398, etc." />
+        <input type="search" pattern="^[a-zA-Z0-9 ]*$" name="search" id="search" bind:value={query} placeholder="eg: Moltres, Galarian, 398, etc." />
     </form>
 
     <svg on:click={(e) => triggerSearch(e)} on:keydown={(e) => triggerSearch(e)} xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
