@@ -5,15 +5,21 @@ html {
 }
 
 body {
-  height  : 100%;
+  height: 100%;
   overflow: auto;
   position: relative;
   font-family: "Press Start 2P", Roboto, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
 }
 
-body::-webkit-scrollbar {
-  display: none;
+root {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
 }
+
+body::-webkit-scrollbar { display: none; }
+#app::-webkit-scrollbar { display: none; }
 
 @keyframes gradient {
   0% {
@@ -47,10 +53,11 @@ body::-webkit-scrollbar {
   justify-content: flex-start;
   overflow: scroll;
   position: relative;
-  max-width: 1280px;
   margin: 0 auto;
   padding: 10px;
   font-family: "Press Start 2P", Roboto, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
 }
 
 root::-webkit-scrollbar {

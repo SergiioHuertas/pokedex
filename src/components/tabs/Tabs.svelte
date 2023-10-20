@@ -41,5 +41,20 @@
     .tabs {
         display: flex;
         width: 100%;
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;     /* Firefox */
+    }
+
+    .tabs-box {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;     /* Firefox */
+    }
+
+    .tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tabs-box::-webkit-scrollbar {
+        display: none;
     }
 </style>
