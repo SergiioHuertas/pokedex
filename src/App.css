@@ -51,7 +51,7 @@ body::-webkit-scrollbar { display: none; }
   height: 100%;
   align-items: center;
   justify-content: flex-start;
-  overflow: scroll;
+  overflow-y: scroll;
   position: relative;
   margin: 0 auto;
   padding: 10px;
