@@ -196,6 +196,11 @@ compress() {
 
 }
 
+# call functions in order
 
 
-#time (create_directories, fetch_json, download_images, upscale, compress)
+create_directories;
+fetch_json;
+download_images;
+upscale;
+compress;
