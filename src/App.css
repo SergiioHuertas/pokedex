@@ -13,12 +13,12 @@ body {
   scrollbar-width: none;     /* Firefox */
 }
 
-root {
+:global {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
 }
 
-body::-webkit-scrollbar { display: none; }
+:global::-webkit-scrollbar { display: none; }
 #app::-webkit-scrollbar { display: none; }
 
 @keyframes gradient {

@@ -323,6 +323,7 @@
         font-size: 12px;
         font-family: 'Press Start 2P', cursive;
         padding: 5px;
+        cursor: pointer;
     }
 
     .dialog-info {

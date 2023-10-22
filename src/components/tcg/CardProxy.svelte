@@ -1,7 +1,7 @@
 <script>
   import altArts from "../../lib/components/alternate-arts.json";
   import promos from "../../lib/components/promos.json";
-	import Card from "./Card.svelte";
+  import Card from "./Card.svelte";
 
   // data / pokemon props
   export let id = undefined;
@@ -212,7 +212,7 @@
 
     }
 
-    return `${ server }/foils/${ fSet }/${ type }/upscaled/${ fNumber }_foil_${ etch }_${ style }_2x.${ ext }`;
+    return `foils/${ fSet }/${ type }/upscaled/${ fNumber }_foil_${ etch }_${ style }_2x.${ ext }`;
 
   }
 
