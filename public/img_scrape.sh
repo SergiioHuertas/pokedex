@@ -198,4 +198,4 @@ compress() {
 
 
 
-time (create_directories, fetch_json, download_images, upscale, compress)
+#time (create_directories, fetch_json, download_images, upscale, compress)
