@@ -78,7 +78,7 @@ download_images() {
 
       fi
 
-    done < <( echo $JSON )
+    done
 
     echo "";
     echo -e "$CURL_BATCH" | curl --parallel --parallel-immediate --parallel-max 20 --config -;
