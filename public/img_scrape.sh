@@ -127,7 +127,7 @@ upscale() {
     local foil_brightness="-channel RGB -brightness-contrast 63x73"
 
     if [[ $FILENAME =~ .*etched.* ]]; then
-      # only need to boost brightness on etched cards
+      # only need to boost brightness on fetched cards
       mask_brightness="-channel RGB -brightness-contrast 32x52"
     fi
 

@@ -319,6 +319,8 @@
   const imageLoader = (e) => {
     loading = false;
     if ( mask || foil ) {
+      console.log( mask, 'mask');
+      console.log( foil, 'foil');
       foilStyles = `
     --mask: url(${mask});
     --foil: url(${foil});
