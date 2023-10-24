@@ -27,19 +27,30 @@
         }, 300)
     };
 
-    // fetch abilities description in en language
-    $: if (pokemonData.abilities.length) {
-        pokemonData.abilities.forEach(ability => {
-            fetch(ability.ability.url)
-                .then(response => response.json())
-                .then(data => {
-                    ability.description = data.effect_entries.find(entry => entry.language.name === 'en').effect;
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        })
+
+     const getAbilities = async (abilities) => {
+        if (abilities.length) {
+            const requests = abilities.map(async ability => {
+                const response = await fetch(ability.ability.url);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ability data for ${ability.ability.name}`);
+                }
+                const data = await response.json();
+                ability.description = data.effect_entries.find(entry => entry.language.name === 'en').effect;
+                return ability;
+            });
+
+            try {
+                const abilitiesRequests = await Promise.all(requests);
+                return abilitiesRequests;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        return Promise.resolve([]);
     }
+
 
 </script>
 
@@ -443,20 +454,23 @@
 
 
                     <!-- abilities with dialog for description-->
+
                     {#if pokemonData.abilities.length}
-                        <div class="pokemonData-abilities">
-                            <div class='abilities-header'>
-                                <strong>Abilities</strong>
+                        {#await getAbilities(pokemonData.abilities) then abilities}
+                            <div class="pokemonData-abilities">
+                                <div class='abilities-header'>
+                                    <strong>Abilities</strong>
+                                </div>
+                                <div class='abilities-body'>
+                                    {#each abilities as ability (ability.ability.name)}
+                                        <div class="ability-item">
+                                            <strong>{ability.ability.name.charAt(0).toUpperCase() + ability.ability.name.slice(1)}</strong> {ability.is_hidden ? "*" : ""}
+                                            {#if ability.description}<div class="dialog-info" on:click={() => triggerDialog(ability.description)}><Icon src={FaSolidInfoCircle} /></div>{/if}
+                                        </div>
+                                    {/each}
+                                </div>
                             </div>
-                            <div class='abilities-body'>
-                                {#each pokemonData.abilities as ability (ability.ability.name)}
-                                    <div class="ability-item">
-                                        <strong>{ability.ability.name.charAt(0).toUpperCase() + ability.ability.name.slice(1)}</strong> {ability.is_hidden ? "*" : ""}
-                                        {#if ability.description}<div class="dialog-info" on:click={() => triggerDialog(ability.description)}><Icon src={FaSolidInfoCircle} /></div>{/if}
-                                    </div>
-                                {/each}
-                            </div>
-                        </div>
+                        {/await}
                     {/if}
 
                     <!--types-->
