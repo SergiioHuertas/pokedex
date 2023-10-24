@@ -1,0 +1,17 @@
+export const TcgFilters = [
+    { code: 'base*', label: 'Base' },
+    { code: 'bw*', label: 'Black & White' },
+    { code: 'dp*', label: 'Diamond & Pearl' },
+    { code: 'ecard*', label: 'E-card' },
+    { code: 'ex*', label: 'EX' },
+    { code: 'gym*', label: 'Gym' },
+    { code: '*hgss*', label: 'HeartGold & SoulSilver' },
+    { code: 'np*', label: 'NP' },
+    { code: 'neo*', label: 'Neo' },
+    { code: 'pop*', label: 'POP' },
+    { code: 'pl*', label: 'Platinum' },
+    { code: 'sv*', label: 'Scarlet & Violet' },
+    { code: 'sm*', label: 'Sun & Moon' },
+    { code: 'swsh*', label: 'Sword & Shield' },
+    { code: 'xy*', label: 'XY' },
+];

@@ -29,7 +29,6 @@
 		justify-content: center;
 		align-items: flex-start;
 		width: 100%;
-		margin-top: 40px;
 		background-color: rgba(0,0,0,0.5);
 		border-width: 3px;
 		border-style: solid;
