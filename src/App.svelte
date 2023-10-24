@@ -8,25 +8,25 @@
 	import Tabs from './components/tabs/Tabs.svelte';
 	import Movements from "./components/movements/Movements.svelte";
 	import {TabIds, TabItems} from './const/TabItems.js';
-	import { TcgFilters } from './const/TcgFilters.js';
 	import Search from "./components/search/Search.svelte";
 	import Header from "./components/header/Header.svelte";
 	import NoData from "./components/no-data/NoData.svelte";
+	import Filters from "./components/tcg/Filters.svelte";
 
 	let showPokedex = false;
-  let query = "";
-  let lastQuery = "";
-  let error = null;
-  let loadingPokedex = false;
-  let currentFilter = '';
+	  let query = "";
+	  let lastQuery = "";
+	  let error = null;
+	  let loadingPokedex = false;
+	  let currentFilter = '';
 
-  let loadingQuery = false;
-  let queryTimer;
-  let tabTimer;
-  let queryResult = [];
-  let isError = false;
-  let pokemonData = null;
-  let evolutionChainData = null;
+	  let loadingQuery = false;
+	  let queryTimer;
+	  let tabTimer;
+	  let queryResult = [];
+	  let isError = false;
+	  let pokemonData = null;
+	  let evolutionChainData = null;
 
   const resetState = () => {
 	  query = "";
@@ -140,17 +140,6 @@
 	  };
   }
 
-  const selectActiveTab = () => {
-	  clearTimeout( tabTimer );
-	  tabTimer = setTimeout(() => {
-		  if (pokemonData == null && queryResult.length > 0) {
-			  $: activeTab = TabIds.TCG - 1;
-		  } else {
-			  $: activeTab = TabIds.POKEDEX - 1;
-		  }
-	  }, 1000);
-  };
-
   const triggerSearch = async (e, newQuery = null) => {
 	  e.preventDefault();
 	  if (newQuery) {
@@ -159,7 +148,6 @@
 	  if (lastQuery !== query) {
 		  await loadQuery();
 		  await loadPokedex();
-		  selectActiveTab();
 	  }
   };
 
@@ -196,23 +184,7 @@
 				{:else if currentTab.id === TabIds.MOVES}
 					<Movements bind:pokemonData error={error} loading={loadingPokedex}/>
 				{:else if currentTab.id === TabIds.TCG}
-					{#if TcgFilters && TcgFilters.length > 0}
-						<div class="tcg-filters">
-							<div class="filter-header">
-								Series
-							</div>
-							<div class="filters">
-								{#each TcgFilters as filter}
-									{#if filter.code === currentFilter}
-										<div class="filter active" on:click={async () => {currentFilter = ''; await loadQuery();}}>{filter.label}</div>
-									{:else}
-										<div class="filter" on:click={async () => {currentFilter = filter.code; await loadQuery(); }}>{filter.label}</div>
-									{/if}
-								{/each}
-							</div>
-						</div>
-					{/if}
-
+					<Filters bind:currentFilter={currentFilter} loadQuery={loadQuery} />
 					{#if usableQuery && loadingQuery}
 						<h3>Fetching Cards...</h3>
 						<span class="loader"></span>
@@ -291,65 +263,5 @@
 	@keyframes fillLq {
 		0% , 10% { background-position: 0 120px}
 		90% , 100% { background-position: 0 0}
-	}
-
-
-	.tcg-filters {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		margin-top: 10px;
-		padding: 20px;
-		background-color: rgba(0,0,0,0.5);
-		border-width: 3px;
-		border-style: solid;
-		border-image: linear-gradient( to bottom, #000000, rgba(0, 0, 0, 0) ) 1 100%;
-	}
-
-	.filters {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.filter-header {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 20px;
-		color: white;
-	}
-
-	.filter {
-		display:inline-block;
-		border:1px solid #CCC;
-		box-shadow: 0 0 5px -1px rgba(0,0,0,0.2);
-		cursor:pointer;
-		vertical-align:middle;
-		padding: 5px;
-		text-align: center;
-		border-radius: 5px;
-		margin: 5px;
-		background: #fff;
-		color: #000;
-		transition: all 0.2s ease-in-out;
-
-		&:hover {
-			background: #000;
-			color: #fff;
-		}
-	}
-
-	.active {
-		background: #000;
-		color: #fff;
-		cursor: pointer;
-
-		&:hover {
-			background: #fff;
-			color: #000;
-		}
 	}
 </style>

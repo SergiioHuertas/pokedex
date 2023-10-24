@@ -444,7 +444,7 @@
       margin: 5px 5px 68px 5px;
   }
 
-  @media screen and ( min-width: 900px ) {
+  @media screen and ( min-width: 768px ) {
       .card {
           display: flex;
           flex: 1;

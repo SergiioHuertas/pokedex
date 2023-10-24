@@ -16,7 +16,7 @@
         flex-wrap: wrap;
     }
 
-    @media screen and ( min-width: 900px ) {
+    @media screen and ( min-width: 768px ) {
         .search-area {
             display: flex;
             justify-content: center;

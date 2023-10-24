@@ -107,7 +107,7 @@
 
     }
 
-        @media screen and ( min-width: 900px ) {
+        @media screen and ( min-width: 768px ) {
             .pokemonData-images {
                 flex: 1;
             }

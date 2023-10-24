@@ -4,7 +4,7 @@
     import TutorMoves from "../moves-tables/TutorMoves.svelte";
     import IoArrowBackCircleSharp from "svelte-icons-pack/io/IoArrowBackCircleSharp";
     import Icon from 'svelte-icons-pack/Icon.svelte';
-    import { GameColors } from "../../const/gameColors.js";
+    import { GameColors } from "../../const/GameColors.js";
     export let pokemonData;
     export let error;
     export let loading;
