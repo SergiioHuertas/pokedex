@@ -22,7 +22,6 @@
 	.card-grid {
 		display: flex;
 		gap: 1%;
-		flex: 1;
 		transform-style: preserve-3d;
 		padding: 15px;
 		flex-wrap: wrap;

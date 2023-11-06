@@ -124,6 +124,10 @@
             }
         }
 
+    .sprites-images {
+        display: flex;
+    }
+
     .top-info {
         display: flex;
         flex-direction: row;

@@ -1,5 +1,6 @@
 <script>
-
+    const user = sessionStorage.getItem("user");
+    const locationRedirect = user ? "/showCase" : "/";
 </script>
 
 <style>
@@ -26,5 +27,5 @@
 </style>
 
 <div class="title-images">
-    <a href="/"><img class='pokedex-title' src="/assets/images/logos/title.png" alt={'title'} /></a>
+    <a href={locationRedirect}><img class='pokedex-title' src="/assets/images/logos/title.png" alt={'title'} /></a>
 </div>

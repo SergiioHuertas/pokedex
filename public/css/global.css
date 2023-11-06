@@ -42,12 +42,7 @@ main {
 }
 
 header {
-  margin-bottom: 4rem;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 30px;
-  max-width: 900px;
-  margin: auto;
+  width: 100%;
 }
 
 header h2 {
