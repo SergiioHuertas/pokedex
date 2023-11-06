@@ -117,6 +117,7 @@
     }
     .user-photo {
         width: 75%;
+        max-width: 65px;
     }
 
     .user-name {
