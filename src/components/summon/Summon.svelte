@@ -15,6 +15,7 @@
     let showPokeball = false;
 
     let isPokeballClicked = false;
+    let ballType = "pokeball";
 
     const toggleRotateEffect = () => {
         isPokeballClicked = true;
@@ -68,7 +69,7 @@
     </div>
     <div class="summon-types">
         {#each SummonTypes as type}
-        <div class="summon-type" on:click={() => showPokeball = true}>
+        <div class="summon-type" on:click={() => { ballType = type.class; showPokeball = true}}>
             <div class="summon-type-image">
                 <div class="summon-type-price">
                     {type.price}
@@ -106,7 +107,7 @@
 
 <div class="pokeball-animation">
     <div class="shadow" class:shadow-effect={isPokeballClicked}></div>
-    <div class="pokeball" class:rotate-effect={isPokeballClicked} on:click={async () => {if (!summonStarted) await startSummon()}}>
+    <div class={ballType} class:rotate-effect={isPokeballClicked} on:click={async () => {if (!summonStarted) await startSummon()}}>
         <div class="reflect" />
         <div class="button" />
     </div>
@@ -219,7 +220,7 @@
         transform: translateX(-50%);
         width: 100%;
     }
-    .pokeball {
+    .pokeball, .superball, .ultraball {
         position: absolute;
         left: 50%;
         top: 40%;
@@ -255,7 +256,62 @@
         border-top: 82.5px solid #e53935;
         left: 1px;
     }
+
     .pokeball::after {
+        content: "";
+        position: absolute;
+        width: 160px; /* Tamaño reducido */
+        height: 0px;
+        background: transparent;
+        border-radius: 100%;
+        margin-top: -0.5%; /* Ajuste menor */
+        margin-left: -1.5%; /* Ajuste menor */
+        border-bottom: 82.5px solid #eceff1;
+        border-top: 82.5px solid transparent;
+        left: 1px;
+    }
+
+    .superball::before {
+        content: "";
+        position: absolute;
+        width: 160px; /* Tamaño reducido */
+        height: 0px;
+        background: transparent;
+        border-radius: 100%;
+        margin-top: -2%; /* Ajuste menor */
+        margin-left: -1.5%; /* Ajuste menor */
+        border-bottom: 82.5px solid transparent; /* Ajuste menor */
+        border-top: 82.5px solid #3498db; /* Cambia el color a azul para la Superball */
+        border-left: 40px solid #e74c3c; /* Agrega detalles rojos a la izquierda */
+        border-right: 40px solid #e74c3c; /* Agrega detalles rojos a la derecha */
+        left: 1px;
+    }
+
+    .superball::after {
+        content: "";
+        position: absolute;
+        width: 160px; /* Tamaño reducido */
+        height: 0px;
+        background: transparent;
+        border-radius: 100%;
+        margin-top: -0.5%; /* Ajuste menor */
+        margin-left: -1.5%; /* Ajuste menor */
+        border-bottom: 82.5px solid #eceff1;
+        border-top: 82.5px solid transparent;
+        left: 1px;
+    }
+
+    .ultraball::before {
+        content: "U";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 24px;
+        color: #ffcc00; /* Amarillo para la letra "U" */
+    }
+
+    .ultraball::after {
         content: "";
         position: absolute;
         width: 160px; /* Tamaño reducido */
