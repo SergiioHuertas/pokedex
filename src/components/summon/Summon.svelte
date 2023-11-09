@@ -1,11 +1,11 @@
 <script>
-    import {onMount} from "svelte";
     import {getUserData} from "../../firebase.js";
     import {SummonTypes} from "../../const/SummonTypes.js";
-    import CardList from "../tcg/Cards.svelte";
     import Card from "../tcg/CardProxy.svelte";
     import {getRandomTcgCard} from "../../lib/helpers/Common.js";
     import {updateUser} from "../../firebase.js";
+
+    let audio;
 
     let userData;
 
@@ -23,6 +23,8 @@
 
     const startSummon = async () => {
         summonStarted = true;
+        audio = new Audio('/assets/audio/evolution-process.mp3');
+        await audio.play();
         toggleRotateEffect();
 
         // Ensure a minimum duration of 3 seconds
@@ -49,6 +51,10 @@
         }
 
         summonFinished = true;
+        audio.pause();
+        audio.currentTime = 0;
+        audio = new Audio('/assets/audio/pokemon-evolve.mp3');
+        await audio.play();
     }
 
     const resetAll = () => {
@@ -87,7 +93,6 @@
 {:else if summonFinished}
     <!-- Show the card -->
     <div class="summon-container">
-        <CardList>
             <Card
                     id={card.id}
                     name={card.name}
@@ -99,8 +104,9 @@
                     rarity={card.rarity}
                     isReverse={card.isReverse}
             />
-        </CardList>
-        <button on:click={() => resetAll()}>Catch it!</button>
+        <div class="summon-button-container">
+            <button on:click={() => resetAll()}>Catch it!</button>
+        </div>
     </div>
 
 {:else if showPokeball && !summonFinished}
@@ -119,6 +125,13 @@
 {/if}
 
 <style>
+    .summon-button-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 30px;
+    }
     button {
         display: flex;
         white-space: nowrap;
@@ -141,7 +154,10 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: rgba(255, 255, 255, 0.6);
+        background-color: rgba(0,0,0,0.5);
+        border-width: 3px;
+        border-style: solid;
+        border-image: linear-gradient( to bottom, #000000, rgba(0, 0, 0, 0) ) 1 100%;
     }
 
     .summon-title {

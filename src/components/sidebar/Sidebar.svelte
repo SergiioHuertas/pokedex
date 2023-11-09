@@ -31,11 +31,13 @@
         {/if}
         <button on:click={() => window.location.href="/showCase"} class="hover:text-gray-700 hover:no-underline">Pokedex</button>
         <button on:click={() => window.location.href="/profile"} class="hover:text-gray-700 hover:no-underline">Profile</button>
+        <button on:click={() => window.location.href="/achievements"} class="hover:text-gray-700 hover:no-underline">Badges</button>
+        <button on:click={() => window.location.href="/team"} class="hover:text-gray-700 hover:no-underline">Team</button>
         <button on:click={() => window.location.href="/collection"} class="hover:text-gray-700 hover:no-underline">Collection</button>
-        <button on:click={() => window.location.href="/battle"} class="hover:text-gray-700 hover:no-underline">Battle!</button>
+        <button on:click={() => window.location.href="/battle"} class="hover:text-gray-700 hover:no-underline battle">Battle!</button>
         <button on:click={() => window.location.href="/summon"} class="hover:text-gray-700 hover:no-underline">Summon</button>
         <button on:click={() => window.location.href="/settings"} class="hover:text-gray-700 hover:no-underline">Settings</button>
-        <button on:click={() => logout()} class="hover:text-gray-700 hover:no-underline">Logout</button>
+        <button on:click={() => logout()} class="hover:text-gray-700 hover:no-underline logout">Logout</button>
     </nav>
 </aside>
 
@@ -108,12 +110,14 @@
         display: flex;
         width: 150px;
         height: 150px;
+        min-height: 150px;
+        min-width: 150px;
         justify-content: center;
         align-items: center;
         background-color: white;
         border: 3px solid black;
         border-radius: 100%;
-        margin-top: 30%;
+        margin-top: 20px;
     }
     .user-photo {
         width: 75%;
@@ -130,5 +134,10 @@
         font-size: 12px;
         color: white;
         font-family: "Press Start 2P", Roboto, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
+    }
+
+    .battle {
+        background-color: #ff0000;
+        color: white;
     }
 </style>

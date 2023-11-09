@@ -5,6 +5,7 @@
     import SignUp from './components/auth/SignUp.svelte';
     import FullShowCase from './components/pokedex/FullShowCase.svelte';
     import Profile from './components/profile/Profile.svelte';
+    import Team from './components/team/Team.svelte';
     import Collection from './components/collection/Collection.svelte';
     import Summon from './components/summon/Summon.svelte';
     import ComingSoon from './components/coming-soon/ComingSoon.svelte';
@@ -40,6 +41,20 @@
             <Sidebar bind:open/>
             <Navbar bind:sidebar={open}/>
             <Profile />
+        </PrivateRoute>
+    </Route>
+    <Route path="/team">
+        <PrivateRoute>
+            <Sidebar bind:open/>
+            <Navbar bind:sidebar={open}/>
+            <Team />
+        </PrivateRoute>
+    </Route>
+    <Route path="/achievements">
+        <PrivateRoute>
+            <Sidebar bind:open/>
+            <Navbar bind:sidebar={open}/>
+            <ComingSoon />
         </PrivateRoute>
     </Route>
     <Route path="/collection">

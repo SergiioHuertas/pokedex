@@ -1,5 +1,4 @@
 <script>
-
 import Card from "./CardProxy.svelte";
 import CardList from "./Cards.svelte";
 </script>

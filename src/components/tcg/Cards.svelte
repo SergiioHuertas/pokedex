@@ -24,10 +24,12 @@
 		gap: 1%;
 		transform-style: preserve-3d;
 		padding: 15px;
+		overflow-y: auto;
 		flex-wrap: wrap;
 		justify-content: center;
-		align-items: flex-start;
+		align-items: center;
 		width: 100%;
+		height: 100%;
 		background-color: rgba(0,0,0,0.5);
 		border-width: 3px;
 		border-style: solid;
