@@ -72,7 +72,7 @@ export const getRandomTcgCard = async () => {
     const result = await pokemon.card
         .where({
             q: `( ${randomFilter.code ? `set.id:${randomFilter.code}` : ``} name:"*${randomCard}*" )`,
-            select: `id,name,number,supertype,subtypes,rarity,images,types,set`,
+            select: `id,name,number,supertype,subtypes,rarity,images,types,set,hp,attacks,weaknesses,resistances,retreatCost,cardmarket`,
             orderBy: `-set.releaseDate,-number`,
             pageSize: 1000
         });

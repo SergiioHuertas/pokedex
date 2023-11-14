@@ -48,6 +48,7 @@
     .tabs-box {
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;     /* Firefox */
+        padding: 10px;
     }
 
     .tabs::-webkit-scrollbar {

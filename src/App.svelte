@@ -6,6 +6,7 @@
     import FullShowCase from './components/pokedex/FullShowCase.svelte';
     import Profile from './components/profile/Profile.svelte';
     import Team from './components/team/Team.svelte';
+    import Battle from './components/battle/Battle.svelte';
     import Collection from './components/collection/Collection.svelte';
     import Summon from './components/summon/Summon.svelte';
     import ComingSoon from './components/coming-soon/ComingSoon.svelte';
@@ -68,7 +69,7 @@
         <PrivateRoute>
             <Sidebar bind:open/>
             <Navbar bind:sidebar={open}/>
-            <ComingSoon />
+            <Battle />
         </PrivateRoute>
     </Route>
     <Route path="/summon">
