@@ -145,6 +145,7 @@
         </div>
         <h1 class="user-name">{userData.nickname}</h1>
         <h2 class="user-email">({userData.email})</h2>
+        <div class="currency"><img class="coin" src="/assets/images/logos/pokecoin.png" /> {userData.money}</div>
 
         <div class="update-profile-and-fcode-container">
             <div class="profile-content">
@@ -223,6 +224,22 @@
 {/if}
 
 <style>
+    .coin {
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+    }
+    .currency {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #dfb340;
+        text-shadow: 2px 2px 2px black;
+    }
+
     .profile-info{
         display: flex;
         flex-direction: column;

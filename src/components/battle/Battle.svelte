@@ -1,5 +1,5 @@
 <script>
-    import {getUserData} from "../../firebase.js";
+    import {getUserData, updateUser} from "../../firebase.js";
     import {onMount} from "svelte";
     import {BattleFields} from "../../const/BattleFields.js";
     import {Characters} from "../../const/Characters.js";
@@ -24,6 +24,8 @@
     let battleWon = false;
     let battleLost = false;
     let randomBattleField;
+    let maxCardsHp = [];
+    let currency;
 
     let enemy;
 
@@ -39,10 +41,12 @@
         await getUserData(JSON.parse(sessionUser).uid).then((user) => {
             if (user) {
                 userData = user;
-                userTeam = userData?.team;
+                userTeam = [...userData?.team];
                 userTeam.forEach((card) => {
                     card.attacks = card.attacks.filter(attack => attack.damage !== '')
+                    maxCardsHp.push(card.hp);
                 })
+                currency = userData.money;
                 firstCard = userTeam[0]
                 userSelectedCard = firstCard;
                 // make a copy of the attacks to reset them later
@@ -123,6 +127,10 @@
                 battleWon = true;
                 await tick();
                 await scrollToBottom(document.querySelector('.battle-messages'));
+                currency = currency + 10;
+                await updateUser(userData.uid, {
+                    money: currency
+                });
                 return;
             }
             battleMessages = [...battleMessages, `${pcSelectedCard.name} was defeated!`].flat(1);
@@ -170,6 +178,23 @@
         changeEnabled = true;
         previousCardDefeated = true;
     }
+
+    const heal = async () => {
+        if (userData.money > 2) {
+            currency = currency - 2;
+            await updateUser(userData.uid, {
+                money: currency
+            });
+            userSelectedCard.hp = userSelectedCard.hp + 20 > maxCardsHp[userTeam.indexOf(userSelectedCard)] ? maxCardsHp[userTeam.indexOf(userSelectedCard)] : userSelectedCard.hp + 20;
+            battleMessages = [...battleMessages, `${userSelectedCard.name} healed 20 HP!`].flat(1);
+            await tick();
+            await scrollToBottom(document.querySelector('.battle-messages'));
+        } else {
+            battleMessages = [...battleMessages, `You don't have enough money!`].flat(1);
+            await tick();
+            await scrollToBottom(document.querySelector('.battle-messages'));
+        }
+    }
 </script>
 
 {#if battleLost || battleWon}
@@ -205,6 +230,11 @@
         {/if}
 
         <h2>{battleLost ? "SORRY, YOU HAVE BEEN DEFEATED, TRY AGAIN!" : "CONGRATULATIONS, YOU WON THE BATTLE!" }</h2>
+        {#if battleWon}
+            <div class="money-earned">
+                <h2>+10</h2><img class="coin" src="/assets/images/logos/pokecoin.png" />
+            </div>
+        {/if}
 
         <div class="final-buttons">
             <div class="goto-battle" on:click={() => window.location.reload()}>Go to battle</div>
@@ -290,7 +320,7 @@
                 </div>
                 <div class="battle-buttons-support">
                     <div class="batte-action-change" on:click={() => enableChange()}>Change</div>
-                    <div class="batte-action-heal">Heal</div>
+                    <div class="batte-action-heal" on:click={() => heal()}>Heal (-2<img class="small-coin" src="/assets/images/logos/pokecoin.png" />)</div>
                 </div>
                 {:else}
                     {#if !previousCardDefeated}
@@ -340,6 +370,24 @@
         justify-content: space-around;
         align-items: center;
         flex-direction: column;
+    }
+
+    .money-earned {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .coin {
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+    }
+
+    .small-coin {
+        width: 25px;
+        height: 25px;
+        margin-right: 5px;
     }
 
     .user-side, .pc-side {
@@ -530,7 +578,7 @@
         margin: 10px;
         align-items: center;
         overflow-y: scroll;
-        height: 200px;
+        height: 160px;
     }
 
     .battle-buttons {
@@ -542,6 +590,12 @@
     .battle-buttons-attack, .battle-buttons-support {
         display: flex;
         justify-content: space-around;
+    }
+
+    .batte-action-heal  {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .batte-action-attack, .batte-action-change, .batte-action-heal, .batte-action-back, .goto-battle, .goto-summon {

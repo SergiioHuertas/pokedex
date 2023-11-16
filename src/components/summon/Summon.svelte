@@ -4,6 +4,7 @@
     import Card from "../tcg/CardProxy.svelte";
     import {getRandomTcgCard} from "../../lib/helpers/Common.js";
     import {updateUser} from "../../firebase.js";
+    import {onMount} from "svelte";
 
     let audio;
 
@@ -16,6 +17,18 @@
 
     let isPokeballClicked = false;
     let ballType = "pokeball";
+    let currency;
+    let selectedSummon;
+
+    onMount(async () => {
+        const sessionUser = sessionStorage.getItem('user');
+        await getUserData(JSON.parse(sessionUser).uid).then((user) => {
+            if (user) {
+                userData = user;
+                currency = user.money;
+            }
+        })
+    })
 
     const toggleRotateEffect = () => {
         isPokeballClicked = true;
@@ -42,9 +55,12 @@
             }
         })
 
+        currency -= selectedSummon.price;
+
         await updateUser(userData.uid, {
             ...userData,
-            collection: [...userData.collection, card]
+            collection: [...userData.collection, card],
+            money: currency
         });
         while (performance.now() - startTime < 4000) {
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -64,6 +80,14 @@
         isPokeballClicked = false;
         card = null;
     }
+
+    const showSummon = (type) => {
+        if (currency >= type.price) {
+            selectedSummon = type;
+            ballType = type.class;
+            showPokeball = true;
+        }
+    }
 </script>
 
 {#if !showPokeball && !summonFinished}
@@ -75,10 +99,10 @@
     </div>
     <div class="summon-types">
         {#each SummonTypes as type}
-        <div class="summon-type" on:click={() => { ballType = type.class; showPokeball = true}}>
+        <div class="summon-type" on:click={() => { showSummon(type)}}>
             <div class="summon-type-image">
                 <div class="summon-type-price">
-                    {type.price}
+                    <img class="coin" src="/assets/images/logos/pokecoin.png" /> {type.price}
                 </div>
                 <img src={type.banner} alt={type.name} width="200px" />
             </div>
@@ -124,7 +148,40 @@
 
 {/if}
 
+{#if userData}
+    <div class="currency"><img class="coin" src="/assets/images/logos/pokecoin.png" /> {currency}</div>
+{/if}
+
 <style>
+    .coin {
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+    }
+    .currency {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        right: 0;
+        margin: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #dfb340;
+        text-shadow: 2px 2px 2px black;
+    }
+
+    .summon-type-price {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #dfb340;
+        text-shadow: 2px 2px 2px black;
+    }
     .summon-button-container {
         display: flex;
         align-items: center;
@@ -139,7 +196,7 @@
         cursor: pointer;
         border: 3px solid gold;
         border-radius: 10px;
-        background-color: #dfb340;
+        background-color: #c1a458;
         margin-top: 10px;
 
         &:hover {

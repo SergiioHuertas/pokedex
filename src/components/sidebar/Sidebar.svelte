@@ -28,6 +28,9 @@
             </div>
             <h1 class="user-name">{userData.nickname}</h1>
             <h2 class="user-email">({userData.email})</h2>
+            {#if userData}
+                <div class="currency"><img class="coin" src="/assets/images/logos/pokecoin.png" /> {userData.money}</div>
+            {/if}
         {/if}
         <button on:click={() => window.location.href="/showCase"} class="hover:text-gray-700 hover:no-underline">Pokedex</button>
         <button on:click={() => window.location.href="/profile"} class="hover:text-gray-700 hover:no-underline">Profile</button>
@@ -42,6 +45,23 @@
 </aside>
 
 <style>
+    .coin {
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+    }
+    .currency {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #dfb340;
+        text-shadow: 2px 2px 2px black;
+    }
+
     aside {
         left: -100%;
         transition: left 0.3s ease-in-out;
