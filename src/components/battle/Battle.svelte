@@ -7,6 +7,8 @@
     import {battleEngine} from "../../lib/helpers/BattleEngine.js";
     import { tick } from 'svelte';
     import {isMobile} from "../../lib/helpers/Common.js";
+    import { Progressbar } from 'flowbite-svelte';
+    import {Badges} from "../../const/Badges.js";
 
     let userData;
     let userTeam;
@@ -25,7 +27,10 @@
     let battleLost = false;
     let randomBattleField;
     let maxCardsHp = [];
+    let pcMaxCardsHp = [];
     let currency;
+    let battlesWon;
+    let userBadges;
 
     let enemy;
 
@@ -49,6 +54,8 @@
                 currency = userData.money;
                 firstCard = userTeam[0]
                 userSelectedCard = firstCard;
+                battlesWon = userData.battlesWon;
+                userBadges = userData.badges;
                 // make a copy of the attacks to reset them later
             }
         })
@@ -56,6 +63,9 @@
             pcTeam = cards;
             pcFirstCard = pcTeam[0];
             pcSelectedCard = pcFirstCard;
+            pcTeam.forEach((card) => {
+                pcMaxCardsHp.push(card.hp);
+            })
         })
     })
 
@@ -82,6 +92,11 @@
     }
 
     const startBattle = () => {
+        // if any of the team cards is null or undefined, return
+        if (userTeam.some(card => card === null || card === undefined)) {
+            alert('You need to choose 3 cards to start the battle!')
+            return;
+        }
         showStartButton = false;
         const interval = setInterval(() => {
             countdown--;
@@ -125,11 +140,23 @@
             if (pcTeam.every(card => card.hp <= 0) && !battleLost) {
                 battleMessages = [...battleMessages, 'You won!'].flat(1);
                 battleWon = true;
+                battlesWon = battlesWon + 1;
                 await tick();
                 await scrollToBottom(document.querySelector('.battle-messages'));
                 currency = currency + 10;
+                // check userData badges and set to obtained true if battles > 10
+
+                Badges.forEach((badge, index) => {
+                    if (badge.winsRequired <= battlesWon && !userBadges[index].obtained) {
+                        userBadges[index].obtained = true;
+                        alert(`You obtained the ${badge.name} badge!`)
+                    }
+                });
+
                 await updateUser(userData.uid, {
-                    money: currency
+                    money: currency,
+                    battlesWon: battlesWon,
+                    badges: userBadges
                 });
                 return;
             }
@@ -195,6 +222,7 @@
             await scrollToBottom(document.querySelector('.battle-messages'));
         }
     }
+
 </script>
 
 {#if battleLost || battleWon}
@@ -265,6 +293,7 @@
                 </div>
                 <div class="pc-card-in-battle">
                     <img src="https://images.pokemontcg.io/{ pcSelectedCard.set.toLowerCase() }/{ pcSelectedCard.number }_hires.png" />
+                    <Progressbar color="green" progress={(pcSelectedCard.hp * 100) / pcMaxCardsHp[pcTeam.indexOf(pcSelectedCard)]} size="h-3" labelInside={pcSelectedCard.hp} />
                     <p>HP: {pcSelectedCard.hp}</p>
                 </div>
             {:else}
@@ -276,6 +305,7 @@
             {#if userSelectedCard}
                 <div class="user-card-in-battle">
                     <img src="https://images.pokemontcg.io/{ userSelectedCard.set.toLowerCase() }/{ userSelectedCard.number }_hires.png" />
+                    <Progressbar color="green" progress={(userSelectedCard.hp * 100) / maxCardsHp[userTeam.indexOf(userSelectedCard)]} size="h-3" labelInside={userSelectedCard.hp} />
                     <p>HP: {userSelectedCard.hp}</p>
                 </div>
                 <div class="user-team-container">
@@ -449,11 +479,13 @@
     .user-card-in-battle {
         display: flex;
         flex-direction: column;
+        gap: 5px;
     }
 
     .pc-card-in-battle {
         display: flex;
         flex-direction: column;
+        gap: 5px;
     }
 
     .card-in-battle {

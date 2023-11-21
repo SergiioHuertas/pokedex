@@ -5,11 +5,12 @@
     import SignUp from './components/auth/SignUp.svelte';
     import FullShowCase from './components/pokedex/FullShowCase.svelte';
     import Profile from './components/profile/Profile.svelte';
+    import Badges from './components/achievements/Badges.svelte';
     import Team from './components/team/Team.svelte';
     import Battle from './components/battle/Battle.svelte';
     import Collection from './components/collection/Collection.svelte';
+    import Settings from './components/settings/Settings.svelte';
     import Summon from './components/summon/Summon.svelte';
-    import ComingSoon from './components/coming-soon/ComingSoon.svelte';
     import PrivateRoute from "./components/auth/PrivateRoute.svelte";
     import Navbar from "./components/sidebar/Navbar.svelte";
     import Sidebar from "./components/sidebar/Sidebar.svelte";
@@ -37,6 +38,13 @@
             <FullShowCase />
         </PrivateRoute>
     </Route>
+    <Route path="/achievements">
+        <PrivateRoute>
+            <Sidebar bind:open/>
+            <Navbar bind:sidebar={open}/>
+            <Badges />
+        </PrivateRoute>
+    </Route>
     <Route path="/profile">
         <PrivateRoute>
             <Sidebar bind:open/>
@@ -49,13 +57,6 @@
             <Sidebar bind:open/>
             <Navbar bind:sidebar={open}/>
             <Team />
-        </PrivateRoute>
-    </Route>
-    <Route path="/achievements">
-        <PrivateRoute>
-            <Sidebar bind:open/>
-            <Navbar bind:sidebar={open}/>
-            <ComingSoon />
         </PrivateRoute>
     </Route>
     <Route path="/collection">
@@ -83,7 +84,7 @@
         <PrivateRoute>
             <Sidebar bind:open/>
             <Navbar bind:sidebar={open}/>
-            <ComingSoon />
+            <Settings />
         </PrivateRoute>
     </Route>
 </Router>
