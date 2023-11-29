@@ -67,8 +67,14 @@
                 battlesWon = userData.battlesWon;
                 userBadges = userData.badges;
                 musicEnabled = userData.music;
-                audio = new Audio('/assets/audio/rival.mp3');
-                if (musicEnabled) await audio.play();
+                if (musicEnabled){
+                    audio = new Audio('/assets/audio/rival.mp3');
+                    try {
+                        await audio.play();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
             }
         })
         await getInitialCards().then((cards) => {
