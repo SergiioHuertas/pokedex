@@ -162,10 +162,6 @@
             if (pcTeam.every(card => card.hp <= 0) && !battleLost) {
                 battleMessages = [...battleMessages, 'You won!'].flat(1);
                 battleWon = true;
-                audio.pause();
-                audio.currentTime = 0;
-                audio = new Audio('/assets/audio/victory.mp3');
-                if (musicEnabled) await audio.play();
                 battlesWon = battlesWon + 1;
                 await tick();
                 await scrollToBottom(document.querySelector('.battle-messages'));
@@ -184,6 +180,11 @@
                     battlesWon: battlesWon,
                     badges: userBadges
                 });
+
+                audio.pause();
+                audio.currentTime = 0;
+                audio = new Audio('/assets/audio/victory.mp3');
+                if (musicEnabled) await audio.play();
                 return;
             }
             battleMessages = [...battleMessages, `${pcSelectedCard.name} was defeated!`].flat(1);
