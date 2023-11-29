@@ -15,7 +15,6 @@
         const response = await firebaseAuth(email, password);
         const { userData, errorMessage } = response;
         if (userData) {
-            console.log(userData, 'userData');
             const { email, uid } = userData;
             const storableUser = JSON.stringify({ email, uid });
             sessionStorage.setItem("user", storableUser);

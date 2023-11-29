@@ -19,6 +19,7 @@
     let ballType = "pokeball";
     let currency;
     let selectedSummon;
+    let musicEnabled;
 
     onMount(async () => {
         const sessionUser = sessionStorage.getItem('user');
@@ -26,6 +27,7 @@
             if (user) {
                 userData = user;
                 currency = user.money;
+                musicEnabled = user.music;
             }
         })
     })
@@ -37,7 +39,7 @@
     const startSummon = async () => {
         summonStarted = true;
         audio = new Audio('/assets/audio/evolution-process.mp3');
-        await audio.play();
+        if (musicEnabled) await audio.play();
         toggleRotateEffect();
 
         // Ensure a minimum duration of 3 seconds
@@ -70,7 +72,7 @@
         audio.pause();
         audio.currentTime = 0;
         audio = new Audio('/assets/audio/pokemon-evolve.mp3');
-        await audio.play();
+        if (musicEnabled) await audio.play();
     }
 
     const resetAll = () => {

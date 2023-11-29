@@ -96,8 +96,7 @@
         align-items: center;
         justify-content: center;
         background-color: rgba(204, 77, 77, 0.5);
-        border-width: 3px;
-        border-style: solid;
+        border: 3px solid black;
         width: 45%;
         height: 50px;
         margin: 5px;

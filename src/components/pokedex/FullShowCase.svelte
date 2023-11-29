@@ -12,8 +12,12 @@
 	import Header from "../header/Header.svelte";
 	import NoData from "../no-data/NoData.svelte";
 	import Filters from "../tcg/Filters.svelte";
+	import { Music } from '../../const/Music.js';
+	import {onMount} from "svelte";
+	import {getUserData} from "../../firebase.js";
 
 	let showPokedex = false;
+	let userData;
 	  let query = "";
 	  let lastQuery = "";
 	  let error = null;
@@ -27,6 +31,29 @@
 	  let isError = false;
 	  let pokemonData = null;
 	  let evolutionChainData = null;
+	  let audio;
+	  let musicEnaled;
+
+	  const playMusic = () => {
+		  // get random music
+		  const music = Music[Math.floor(Math.random() * Music.length)];
+		  audio = new Audio(music.url);
+		  audio.loop = true;
+		  audio.play();
+	  }
+
+	onMount(async () => {
+		const sessionUser = sessionStorage.getItem('user');
+		await getUserData(JSON.parse(sessionUser).uid).then((user) => {
+			if (user) {
+				userData = user;
+				musicEnaled = user.music;
+				if (musicEnaled) {
+					playMusic();
+				}
+			}
+		})
+	})
 
   const resetState = () => {
 	  query = "";
@@ -56,8 +83,6 @@
     		loadingQuery = true;
     		clearTimeout( queryTimer );
     		queryTimer = setTimeout(() => {
-				console.log(currentFilter, 'currentFilter');
-				console.log(query, 'query');
 				pokemon.card
     				.where({
     					q: `( ${currentFilter ? `set.id:${currentFilter}` : ``} name:"*${query}*" )`,
@@ -67,7 +92,6 @@
     				})
     				.then(result => {
     					const cards = result.data || [];
-						console.log(cards, 'cards');
               			queryResult = [];
               			isError = false;
 

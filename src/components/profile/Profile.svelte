@@ -101,9 +101,7 @@
     const getFriendNames = async (friends) => {
         if (friends.length) {
             const requests = friends.map(async friendRequest => {
-                console.log(friendRequest, 'friendRequest')
                 const response = await getUserData(friendRequest);
-                console.log(response, 'response');
                 if (response) return {uid: friendRequest, nickname: response.nickname, photoURL: response.photoURL};
             });
 

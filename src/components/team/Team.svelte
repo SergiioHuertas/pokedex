@@ -72,6 +72,16 @@
     function onSortableDestroy ()    { }
 
     const addCardToTeam = (card) => {
+
+        if (card.hp == undefined || card.hp == null) {
+            alert('You can only add pokemon cards to your team!');
+            return;
+        }
+
+        if (card.attacks == undefined || card.attacks == null) {
+            alert('You can only add pokemon cards with attacks to your team!');
+            return;
+        }
         // if card already in ListElements, return
 
         const elementFound = ListElements.find((element) => element?.id == card.id);

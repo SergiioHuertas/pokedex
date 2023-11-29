@@ -31,6 +31,8 @@
     let currency;
     let battlesWon;
     let userBadges;
+    let musicEnabled;
+    let audio;
 
     let enemy;
 
@@ -43,12 +45,20 @@
         randomBattleField = getRandomBattleField();
 
         const sessionUser = sessionStorage.getItem('user');
-        await getUserData(JSON.parse(sessionUser).uid).then((user) => {
+        await getUserData(JSON.parse(sessionUser).uid).then(async (user) => {
             if (user) {
                 userData = user;
                 userTeam = [...userData?.team];
                 userTeam.forEach((card) => {
                     card.attacks = card.attacks.filter(attack => attack.damage !== '')
+                    if (card.attacks.length === 0) {
+                        card.attacks = [{
+                            name: 'Combat',
+                            damage: '10',
+                            convertedEnergyCost: 0,
+                            cost: 0
+                        }]
+                    }
                     maxCardsHp.push(card.hp);
                 })
                 currency = userData.money;
@@ -56,7 +66,9 @@
                 userSelectedCard = firstCard;
                 battlesWon = userData.battlesWon;
                 userBadges = userData.badges;
-                // make a copy of the attacks to reset them later
+                musicEnabled = userData.music;
+                audio = new Audio('/assets/audio/rival.mp3');
+                if (musicEnabled) await audio.play();
             }
         })
         await getInitialCards().then((cards) => {
@@ -98,11 +110,15 @@
             return;
         }
         showStartButton = false;
-        const interval = setInterval(() => {
+        const interval = setInterval(async () => {
             countdown--;
             if (countdown === 0) {
                 clearInterval(interval);
                 battleStarted = true;
+                audio.pause();
+                audio.currentTime = 0;
+                audio = new Audio('/assets/audio/battle.mp3');
+                if (musicEnabled) await audio.play();
             }
         }, 1000);
     };
@@ -140,6 +156,10 @@
             if (pcTeam.every(card => card.hp <= 0) && !battleLost) {
                 battleMessages = [...battleMessages, 'You won!'].flat(1);
                 battleWon = true;
+                audio.pause();
+                audio.currentTime = 0;
+                audio = new Audio('/assets/audio/victory.mp3');
+                if (musicEnabled) await audio.play();
                 battlesWon = battlesWon + 1;
                 await tick();
                 await scrollToBottom(document.querySelector('.battle-messages'));
@@ -198,6 +218,10 @@
             battleMessages = [...battleMessages, 'You lost!'].flat(1);
             battleWon = false;
             battleLost = true;
+            audio.pause();
+            audio.currentTime = 0;
+            audio = new Audio('/assets/audio/recovery.mp3');
+            if (musicEnabled) await audio.play();
             await tick();
             await scrollToBottom(document.querySelector('.battle-messages'));
             return;
@@ -221,6 +245,16 @@
             await tick();
             await scrollToBottom(document.querySelector('.battle-messages'));
         }
+    }
+
+    const getHealthColor = (card, maxHp) => {
+        if (card.hp <= (maxHp * 25 / 100)) {
+            return 'red';
+        }
+        if (card.hp <= maxHp / 2) {
+            return 'yellow';
+        }
+        return 'green';
     }
 
 </script>
@@ -293,8 +327,8 @@
                 </div>
                 <div class="pc-card-in-battle">
                     <img src="https://images.pokemontcg.io/{ pcSelectedCard.set.toLowerCase() }/{ pcSelectedCard.number }_hires.png" />
-                    <Progressbar color="green" progress={(pcSelectedCard.hp * 100) / pcMaxCardsHp[pcTeam.indexOf(pcSelectedCard)]} size="h-3" labelInside={pcSelectedCard.hp} />
-                    <p>HP: {pcSelectedCard.hp}</p>
+                    <Progressbar labelInside animation color={getHealthColor(pcSelectedCard, pcMaxCardsHp[pcTeam.indexOf(pcSelectedCard)])} progress={(pcSelectedCard.hp * 100) / pcMaxCardsHp[pcTeam.indexOf(pcSelectedCard)]} size="h-3" />
+                    <p>{`${pcSelectedCard.hp} / ${pcMaxCardsHp[pcTeam.indexOf(pcSelectedCard)]}`}</p>
                 </div>
             {:else}
                 <p>loading...</p>
@@ -305,8 +339,8 @@
             {#if userSelectedCard}
                 <div class="user-card-in-battle">
                     <img src="https://images.pokemontcg.io/{ userSelectedCard.set.toLowerCase() }/{ userSelectedCard.number }_hires.png" />
-                    <Progressbar color="green" progress={(userSelectedCard.hp * 100) / maxCardsHp[userTeam.indexOf(userSelectedCard)]} size="h-3" labelInside={userSelectedCard.hp} />
-                    <p>HP: {userSelectedCard.hp}</p>
+                    <Progressbar labelInside animation color={getHealthColor(userSelectedCard, maxCardsHp[userTeam.indexOf(userSelectedCard)])} progress={(userSelectedCard.hp * 100) / maxCardsHp[userTeam.indexOf(userSelectedCard)]} size="h-3" />
+                    <p>{`${userSelectedCard.hp} / ${maxCardsHp[userTeam.indexOf(userSelectedCard)]}`}</p>
                 </div>
                 <div class="user-team-container">
                     <div class="user-team-description">
@@ -691,6 +725,15 @@
     .final-buttons {
         display: flex;
         align-items: center;
+    }
+
+    .labelOutside {
+        display: flex;
+        color: black;
+
+        &:nth-child(2) {
+            display: none;
+        }
     }
 
     @media screen and (max-width: 768px) {
