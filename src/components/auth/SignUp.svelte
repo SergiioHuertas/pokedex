@@ -7,32 +7,39 @@
     let errorMsg = '';
     let nickname = '';
     let randomTheme = Themes[Math.floor(Math.random() * Themes.length)];
+    let loading = false;
 
     document.body.style.backgroundImage = `url(${randomTheme.img})`;
 
     async function signUp() {
+            loading = true;
             const response = await firebaseSignUp(email, password, nickname);
             const { userData, errorMessage } = response;
             if (userData) {
                 window.location.href = '/';
             } else {
+                loading = false;
                 errorMsg = errorMessage;
             }
     }
 </script>
 
 <main>
-    <h1>Sign Up</h1>
-    <input type="email" bind:value={email} placeholder="Email" />
-    <input type="text" bind:value={nickname} placeholder="Nickname" />
-    <input type="password" bind:value={password} placeholder="Password" />
-    <div class="signup-buttons">
-        <button on:click={() => window.location.href="/"}>Back</button>
-        <button on:click={() => signUp()}>Confirm</button>
-        {#if errorMsg}
-            <p>{errorMsg}</p>
-        {/if}
-    </div>
+    {#if loading}
+        <h1>Loading...</h1>
+    {:else}
+        <h1>Sign Up</h1>
+        <input type="email" bind:value={email} placeholder="Email" />
+        <input type="text" bind:value={nickname} placeholder="Nickname" />
+        <input type="password" bind:value={password} placeholder="Password" />
+        <div class="signup-buttons">
+            <button on:click={() => window.location.href="/"}>Back</button>
+            <button on:click={() => signUp()}>Confirm</button>
+            {#if errorMsg}
+                <p>{errorMsg}</p>
+            {/if}
+        </div>
+    {/if}
 </main>
 
 <style>

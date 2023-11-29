@@ -24,12 +24,12 @@
 
     $: (async function () {
         const sessionUser = sessionStorage.getItem('user');
-        await getUserData(JSON.parse(sessionUser).uid).then((user) => {
+        await getUserData(JSON.parse(sessionUser)?.uid).then((user) => {
             if (user) {
                 background = user.background;
                 Themes.forEach((theme) => {
                     if (theme.id === background) {
-                        document.body.style.backgroundImage = `url(${theme.img})`;
+                        document.body.style.backgroundImage = `url(${theme?.img})`;
                     }
                 })
             }
