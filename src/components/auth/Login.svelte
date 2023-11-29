@@ -1,9 +1,13 @@
 <script>
     import { firebaseAuth } from '../../firebase.js';
+    import { Themes } from '../../const/Themes.js';
 
     let email = '';
     let password = '';
     let errorMsg = '';
+    let randomTheme = Themes[Math.floor(Math.random() * Themes.length)];
+
+    document.body.style.backgroundImage = `url(${randomTheme.img})`;
 
     $: user = sessionStorage.getItem("user");
 

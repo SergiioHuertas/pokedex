@@ -1,10 +1,14 @@
 <script>
     import { firebaseSignUp } from '../../firebase.js';
+    import {Themes} from "../../const/Themes.js";
 
     let email = '';
     let password = '';
     let errorMsg = '';
     let nickname = '';
+    let randomTheme = Themes[Math.floor(Math.random() * Themes.length)];
+
+    document.body.style.backgroundImage = `url(${randomTheme.img})`;
 
     async function signUp() {
             const response = await firebaseSignUp(email, password, nickname);
