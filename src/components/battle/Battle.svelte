@@ -37,7 +37,7 @@
     let enemy;
 
     const scrollToBottom = async (node) => {
-        node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
+        node?.scroll({ top: node.scrollHeight, behavior: 'smooth' });
     };
 
     onMount(async () => {
@@ -45,7 +45,7 @@
         randomBattleField = getRandomBattleField();
 
         const sessionUser = sessionStorage.getItem('user');
-        await getUserData(JSON.parse(sessionUser).uid).then(async (user) => {
+        await getUserData(JSON.parse(sessionUser).uid).then((user) => {
             if (user) {
                 userData = user;
                 userTeam = [...userData?.team];
@@ -67,14 +67,21 @@
                 battlesWon = userData.battlesWon;
                 userBadges = userData.badges;
                 musicEnabled = userData.music;
-                if (musicEnabled){
-                    audio = new Audio('/assets/audio/rival.mp3');
-                    try {
-                        await audio.play();
-                    } catch (e) {
-                        console.log(e);
+                const interval = setInterval(async () => {
+                    clearInterval(interval);
+                    if (musicEnabled){
+                        if (audio) {
+                            audio.pause();
+                            audio.currentTime = 0;
+                        }
+                        audio = new Audio('/assets/audio/rival.mp3');
+                        try {
+                            await audio.play();
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
-                }
+                }, 1000);
             }
         })
         await getInitialCards().then((cards) => {
@@ -121,10 +128,14 @@
             if (countdown === 0) {
                 clearInterval(interval);
                 battleStarted = true;
-                audio.pause();
-                audio.currentTime = 0;
-                audio = new Audio('/assets/audio/battle.mp3');
-                if (musicEnabled) await audio.play();
+                try {
+                    await audio.pause();
+                    audio.currentTime = 0;
+                    audio = new Audio('/assets/audio/battle.mp3');
+                    if (musicEnabled) await audio.play();
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }, 1000);
     };
@@ -181,10 +192,18 @@
                     badges: userBadges
                 });
 
-                audio.pause();
-                audio.currentTime = 0;
-                audio = new Audio('/assets/audio/victory.mp3');
-                if (musicEnabled) await audio.play();
+                const interval = setInterval(async () => {
+                    clearInterval(interval);
+                    try {
+                        await audio.pause();
+                        audio.currentTime = 0;
+                        audio = new Audio('/assets/audio/victory.mp3');
+                        if (musicEnabled) await audio.play();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }, 1000);
+
                 return;
             }
             battleMessages = [...battleMessages, `${pcSelectedCard.name} was defeated!`].flat(1);
@@ -225,12 +244,19 @@
             battleMessages = [...battleMessages, 'You lost!'].flat(1);
             battleWon = false;
             battleLost = true;
-            audio.pause();
-            audio.currentTime = 0;
-            audio = new Audio('/assets/audio/recovery.mp3');
-            if (musicEnabled) await audio.play();
             await tick();
             await scrollToBottom(document.querySelector('.battle-messages'));
+            const interval = setInterval(async () => {
+                clearInterval(interval);
+                try {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio = new Audio('/assets/audio/recovery.mp3');
+                    if (musicEnabled) await audio.play();
+                } catch (e) {
+                    console.log(e);
+                }
+            }, 1000);
             return;
         }
         changeEnabled = true;

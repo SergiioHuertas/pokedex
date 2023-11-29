@@ -48,9 +48,16 @@
 			if (user) {
 				userData = user;
 				musicEnaled = user.music;
-				if (musicEnaled) {
-					playMusic();
-				}
+				const interval = setInterval(async () => {
+					clearInterval(interval);
+					try {
+						if (musicEnaled) {
+							playMusic();
+						}
+					} catch (e) {
+						console.log(e);
+					}
+				}, 1000);
 			}
 		})
 	})
