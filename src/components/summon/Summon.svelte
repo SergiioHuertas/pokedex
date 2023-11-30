@@ -21,6 +21,7 @@
     let currency;
     let selectedSummon;
     let musicEnabled;
+    let volumeLevel = 0.1;
 
     onMount(async () => {
         const sessionUser = sessionStorage.getItem('user');
@@ -29,6 +30,7 @@
                 userData = user;
                 currency = user.money;
                 musicEnabled = user.music;
+                volumeLevel = user.volume;
             }
         })
     })
@@ -41,6 +43,7 @@
         summonStarted = true;
         audio = new Audio('/assets/audio/evolution-process.mp3');
         audio.loop = true;
+        audio.volume = volumeLevel;
         if (musicEnabled) await audio.play();
         toggleRotateEffect();
 
@@ -74,6 +77,7 @@
         audio.pause();
         audio.currentTime = 0;
         audio = new Audio('/assets/audio/pokemon-evolve.mp3');
+        audio.volume = volumeLevel;
         if (musicEnabled) await audio.play();
     }
 

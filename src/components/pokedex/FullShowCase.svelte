@@ -26,6 +26,7 @@
 
 	  let loadingQuery = false;
 	  let queryTimer;
+	  let volumeLevel;
 	  let tabTimer;
 	  let queryResult = [];
 	  let isError = false;
@@ -39,6 +40,7 @@
 		  const music = Music[Math.floor(Math.random() * Music.length)];
 		  audio = new Audio(music.url);
 		  audio.loop = true;
+		  audio.volume = volumeLevel;
 		  audio.play();
 	  }
 
@@ -48,6 +50,7 @@
 			if (user) {
 				userData = user;
 				musicEnaled = user.music;
+				volumeLevel = user.volume;
 				const interval = setInterval(async () => {
 					clearInterval(interval);
 					try {

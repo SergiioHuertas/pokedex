@@ -6,6 +6,11 @@
     let userData;
     let selectedMusic;
     let selectedTheme;
+    let volume = 50; // Valor inicial del volumen
+
+    function handleInputChange(event) {
+        volume = event.target.value;
+    }
 
     onMount(async () => {
         const sessionUser = sessionStorage.getItem('user');
@@ -14,6 +19,7 @@
                 userData = user;
                 selectedTheme = userData.background;
                 selectedMusic = userData.music;
+                volume = userData.volume * 100;
             }
         })
     })
@@ -23,7 +29,8 @@
         selectedMusic = document.querySelector('.music-container input').checked;
         await updateUser(userData.uid, {
             background: selectedTheme,
-            music: selectedMusic
+            music: selectedMusic,
+            volume: volume / 100
         });
         window.location.reload();
     }
@@ -39,6 +46,20 @@
                     <input checked={selectedMusic} type="checkbox">
                     <span class="slider round"></span>
                 </label>
+            </div>
+            <div class="volume-container">
+                <label for="volumen">Volume</label> <p>{volume}</p>
+                <div class="slider-container">
+                    <input
+                            type="range"
+                            id="volumen"
+                            bind:value={volume}
+                            min="0"
+                            max="100"
+                            on:input={handleInputChange}
+                            class="volume-slider"
+                    />
+                </div>
             </div>
             <div class="language-container">
                 Language
@@ -112,11 +133,31 @@
         align-items: center;
     }
 
-    .music-container, .language-container, .theme-container, .font-container {
+    .music-container, .language-container, .theme-container, .font-container, .volume-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         margin: 10px;
+    }
+
+    .slider-container {
+        width: 100%;
+        position: relative;
+        height: 34px; /* Ajusta la altura según tus preferencias */
+        overflow: hidden;
+    }
+
+    .volume-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
     }
 
     /* The switch - the box around the slider */

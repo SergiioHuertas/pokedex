@@ -33,6 +33,7 @@
     let userBadges;
     let musicEnabled;
     let audio;
+    let volumeLevel = 0.1;
 
     let enemy;
 
@@ -67,6 +68,7 @@
                 battlesWon = userData.battlesWon;
                 userBadges = userData.badges;
                 musicEnabled = userData.music;
+                volumeLevel = userData.volume;
                 const interval = setInterval(async () => {
                     clearInterval(interval);
                     if (musicEnabled){
@@ -76,6 +78,7 @@
                         }
                         audio = new Audio('/assets/audio/rival.mp3');
                         try {
+                            audio.volume = volumeLevel;
                             await audio.play();
                         } catch (e) {
                             console.log(e);
@@ -132,6 +135,7 @@
                     await audio.pause();
                     audio.currentTime = 0;
                     audio = new Audio('/assets/audio/battle.mp3');
+                    audio.volume = volumeLevel;
                     if (musicEnabled) await audio.play();
                 } catch (e) {
                     console.log(e);
@@ -198,6 +202,7 @@
                         await audio.pause();
                         audio.currentTime = 0;
                         audio = new Audio('/assets/audio/victory.mp3');
+                        audio.volume = volumeLevel;
                         if (musicEnabled) await audio.play();
                     } catch (e) {
                         console.log(e);
