@@ -12,11 +12,12 @@
 
     let summonStarted = false;
     let summonFinished = false;
-    let card;
+    let cards = [];
     let showPokeball = false;
 
     let isPokeballClicked = false;
     let ballType = "pokeball";
+    let ammount = 1;
     let currency;
     let selectedSummon;
     let musicEnabled;
@@ -39,14 +40,15 @@
     const startSummon = async () => {
         summonStarted = true;
         audio = new Audio('/assets/audio/evolution-process.mp3');
+        audio.loop = true;
         if (musicEnabled) await audio.play();
         toggleRotateEffect();
 
         // Ensure a minimum duration of 3 seconds
         const startTime = performance.now();
-        while (!card) {
+        while (cards.length < ammount) {
             await getRandomTcgCard().then((cardData) => {
-                card = cardData;
+                if (cardData) cards.push(cardData);
             })
         }
 
@@ -61,7 +63,7 @@
 
         await updateUser(userData.uid, {
             ...userData,
-            collection: [...userData.collection, card],
+            collection: [...userData.collection, ...cards.map((card) => card)],
             money: currency
         });
         while (performance.now() - startTime < 4000) {
@@ -80,13 +82,15 @@
         summonFinished = false;
         showPokeball = false;
         isPokeballClicked = false;
-        card = null;
+        ammount = 1;
+        cards = [];
     }
 
     const showSummon = (type) => {
         if (currency >= type.price) {
             selectedSummon = type;
             ballType = type.class;
+            ammount = type.ammount;
             showPokeball = true;
         }
     }
@@ -109,7 +113,8 @@
                 <img src={type.banner} alt={type.name} width="200px" />
             </div>
             <div class="summon-type-name">
-                {type.name}
+                <p>{type.name}</p>
+                <p>(x{type.ammount})</p>
             </div>
         </div>
         {/each}
@@ -119,17 +124,21 @@
 {:else if summonFinished}
     <!-- Show the card -->
     <div class="summon-container">
-            <Card
-                    id={card.id}
-                    name={card.name}
-                    set={card.set}
-                    number={card.number}
-                    types={card.types}
-                    supertype={card.supertype}
-                    subtypes={card.subtypes}
-                    rarity={card.rarity}
-                    isReverse={card.isReverse}
-            />
+        <div class="summon-cards-container">
+            {#each cards as card}
+                <Card
+                        id={card.id}
+                        name={card.name}
+                        set={card.set}
+                        number={card.number}
+                        types={card.types}
+                        supertype={card.supertype}
+                        subtypes={card.subtypes}
+                        rarity={card.rarity}
+                        isReverse={card.isReverse}
+                />
+            {/each}
+        </div>
         <div class="summon-button-container">
             <button on:click={() => resetAll()}>Catch it!</button>
         </div>
@@ -144,7 +153,12 @@
         <div class="button" />
     </div>
     <div class="summon-info">
-        {!isPokeballClicked ? "Press the pokeball to free the pokemon" : "Seems like it's opening..."}
+        {#if !isPokeballClicked}
+            <p>Press the pokeball to free the pokemon</p>
+        {:else}
+            <p>Seems like it's opening...</p>
+            <p>Please wait, it might take a while...</p>
+        {/if}
     </div>
 </div>
 
@@ -217,6 +231,14 @@
         border-width: 3px;
         border-style: solid;
         border-image: linear-gradient( to bottom, #000000, rgba(0, 0, 0, 0) ) 1 100%;
+    }
+
+    .summon-cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 50px 15px 15px 15px;
+        padding: 10px;
     }
 
     .summon-title {
