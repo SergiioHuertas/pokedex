@@ -2,6 +2,7 @@
     import {onMount} from "svelte";
     import {getUserData, updateUser} from "../../firebase.js";
     import {Themes} from "../../const/Themes.js";
+    import {isMobile} from "../../lib/helpers/Common.js";
 
     let userData;
     let selectedMusic;
@@ -47,20 +48,22 @@
                     <span class="slider round"></span>
                 </label>
             </div>
-            <div class="volume-container">
-                <label for="volumen">Volume</label> <p>{volume}</p>
-                <div class="slider-container">
-                    <input
-                            type="range"
-                            id="volumen"
-                            bind:value={volume}
-                            min="0"
-                            max="100"
-                            on:input={handleInputChange}
-                            class="volume-slider"
-                    />
+            {#if !isMobile()}
+                <div class="volume-container">
+                    <label for="volumen">Volume</label> <p>{volume}</p>
+                    <div class="slider-container">
+                        <input
+                                type="range"
+                                id="volumen"
+                                bind:value={volume}
+                                min="0"
+                                max="100"
+                                on:input={handleInputChange}
+                                class="volume-slider"
+                        />
+                    </div>
                 </div>
-            </div>
+            {/if}
             <div class="language-container">
                 Language
                 <div class="language-dropdown">

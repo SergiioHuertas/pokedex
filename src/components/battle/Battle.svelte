@@ -2,6 +2,8 @@
     import {getUserData, updateUser} from "../../firebase.js";
     import {onMount} from "svelte";
     import {BattleFields} from "../../const/BattleFields.js";
+    import { Drawer } from 'flowbite-svelte';
+    import { sineIn } from 'svelte/easing';
     import {Characters} from "../../const/Characters.js";
     import {getInitialCards} from "../../lib/helpers/Common.js";
     import {battleEngine} from "../../lib/helpers/BattleEngine.js";
@@ -34,8 +36,14 @@
     let musicEnabled;
     let audio;
     let volumeLevel = 0.1;
-
     let enemy;
+
+    let hidden8 = true;
+    let transitionParamsBottom = {
+        y: 320,
+        duration: 200,
+        easing: sineIn
+    };
 
     const scrollToBottom = async (node) => {
         node?.scroll({ top: node.scrollHeight, behavior: 'smooth' });
@@ -295,6 +303,12 @@
         return 'green';
     }
 
+    const showMessages = async () => {
+        hidden8 = false;
+        await tick();
+        await scrollToBottom(document.querySelector('.battle-messages'));
+    }
+
 </script>
 
 {#if battleLost || battleWon}
@@ -402,6 +416,7 @@
             {/if}
         </div>
         <div class="battle-actions">
+            {#if !isMobile()}
             <div class="battle-messages">
                 {#each battleMessages as message}
                     {#if (message !== ',' && message !== undefined && message !== '')}
@@ -409,6 +424,17 @@
                     {/if}
                 {/each}
             </div>
+            {:else}
+                <Drawer placement="bottom" width="w-full" transitionType="fly" transitionParams={transitionParamsBottom} bind:hidden={hidden8} id="sidebar8">
+                    <div class="battle-messages">
+                        {#each battleMessages as message}
+                            {#if (message !== ',' && message !== undefined && message !== '')}
+                                <p>{message}</p><br/>
+                            {/if}
+                        {/each}
+                    </div>
+                </Drawer>
+            {/if}
             <div class="battle-buttons">
                 {#if !changeEnabled}
                 <div class="battle-buttons-attack">
@@ -428,6 +454,9 @@
                     {#if !previousCardDefeated}
                         <div class="batte-action-back" on:click={() => changeEnabled = false}>Back</div>
                     {/if}
+                {/if}
+                {#if isMobile()}
+                    <div class="show-messages" on:click={() => showMessages()}>Messages</div>
                 {/if}
             </div>
         </div>
@@ -715,6 +744,23 @@
 
         &:hover {
             background-color: black;
+            color: white;
+        }
+    }
+
+    .show-messages {
+        font-family: "Press Start 2P", Roboto, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
+        font-size: 20px;
+        text-decoration: none;
+        padding: 10px 20px;
+        border: 3px solid black;
+        border-radius: 10px;
+        background-color: gold;
+        cursor: pointer;
+        margin: 5px;
+
+        &:hover {
+            background-color: gold;
             color: white;
         }
     }
